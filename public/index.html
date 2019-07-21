@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Kotaku Scraper</title>
+    <style>
+      .jumbotron{
+        background-color: coral;
+        opacity: .75;
+      }
+      body { background-image: url("gta.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+      #wrapper {
+        width: 960px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 5%;
+      }
+      #articles {
+        display: inline-block;
+        /* overflow: auto; */
+        background-color: coral;
+        opacity: .9;
+        padding: 5px;
+        width: 650px;
+      }
+      #notes {
+        float: right;
+        width: 30%;
+      }
+      textarea, input {
+        display: block;
+        width: 100%;
+        background-color: #FCF5C7;
+      }
+      input {
+        height: 36px;
+        font-size: 24px;
+      }
+      textarea {
+        height: 200px;
+        font-size: 18px;
+      }
+a:link {
+  color: black;
+}
+a:visited {
+  color: black;
+}
+a:hover {
+  color: white;
+}
+h2{
+  background: coral;
+  opacity: .9;
+}
+    </style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">Data Scraper</h1>
+          <hr>
+          <p class="lead"><h5>Click here to scrape.</h5></p>
+          <button class = "btn btn-danger" id = "scrape">Scrape!</button>
+        </div>
+      </div>
+      <div id="articles"></div>
+      <div id="notes"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
