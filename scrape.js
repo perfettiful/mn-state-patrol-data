@@ -14,11 +14,13 @@ mongoose.connect(MONGODB_URI, {
 let startAt = parseInt(process.argv[2])
 let endAt = parseInt(process.argv[3])
 
-let i;
+let i = startAt;
 
-async function pageResults(link) {
+async function pageResults(link, i) {
 
     let baseURL = "https://app.dps.mn.gov";
+
+    let fullURL = baseURL + link;
 
     axios.get(baseURL + link).then((incidentRes) => {
 
@@ -42,6 +44,7 @@ async function pageResults(link) {
         
         let incidentObj = {
             "page": i,
+            "fullURL" : fullURL,
             "injury": incidentPage['0']['0']['1'].trim(),
             "ICR": incidentPage['0']['0']['3'].trim(),
             "date": incidentPage['0']['0']['5'].trim(),
@@ -57,19 +60,20 @@ async function pageResults(link) {
             "helmet"  : incidentPage['16']['16']['27'].trim(),
             "alcoholInvolved"  : incidentPage['16']['16']['30'].trim()
         }   
+        
+        console.log(incidentObj)
+        console.log("----------^ SCRAPED PAGE "+i+" ^-----------\n\n");
 
         db.Incident.create(incidentObj)
 
         .then(function (dbIncident) {
-            console.log(incidentObj)
-            console.log("----------^ SCRAPED PAGE "+i+" ^-----------\n\n");
             console.log("----------v v INSERTED PAGE "+i+"  vvv")
             console.log(dbIncident)
 
         })
 
         .catch(function (err) {
-            console.log("---ERROR Code on page "+i+"\n",err)
+            console.log("---ERROR Code on page "+i+"\n===  ",err.code +"\n===  " + err.errmsg)
         })
 
         
@@ -91,7 +95,7 @@ async function pageResults(link) {
             "alcoholInvolved"  :  "N/A"
         }
         console.log("-------vv  Database ERROR data  "+i+" vvv---")
-        //console.log(incidentObj)
+        console.log(err)
 
     })
 } //end pageResult fct def 
@@ -103,7 +107,7 @@ async function run (start , end){
     for ( i = start ; i < end +1; i++){
         console.log('=========== On Page ', i)
 
-        await pageResults('/MSPMedia2/IncidentDisplay/'+i)
+        await pageResults('/MSPMedia2/IncidentDisplay/'+i, i)
 
     }
 }//end run fct def

@@ -34,6 +34,11 @@ page: {
     required: false
 
   },
+fullURL: {
+    type: String,
+    required: false
+
+  },
 injury: {
     type: String,
     required: false
