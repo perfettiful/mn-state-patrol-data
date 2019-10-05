@@ -14,46 +14,34 @@ mongoose.connect(MONGODB_URI, {
 let startAt = parseInt(process.argv[2])
 let endAt = parseInt(process.argv[3])
 
+let i;
 
- function pageResults(link) {
+async function pageResults(link) {
 
     let baseURL = "https://app.dps.mn.gov";
-    //console.log('inside pageResuls fct')
 
     axios.get(baseURL + link).then((incidentRes) => {
-        // Then, we load that into cheerio and save it to $ for a shorthand selector
+
         let incidentPg = incidentRes.data;
-
-        //console.log(incidentPg);
-
-        //let pgContent = incidentPg.match(/<\s*a[^>]*>(.*?)<\s*/\s*a>/g);
-        //let pgContent = incidentPg.getElementById()
 
         var $ = cheerio.load(incidentRes.data);
       
-
-        //console.log( $('#incident-body').scrape(frame, { string: true } ))
         var incidentPage = [];
         $(".row").each(function (i, element) {
 
-            //console.log($(this).find('div').children);
             pageContent = $(this).find("div").text().replace(/\n|   |\t/g, '').split("   ")
             let headerRow = pageContent[0]
             let dataRow = pageContent[1]
 
-            //console.log(headerRow)
-            //console.log('--------------')
-            //console.log(dataRow)
+
             let dataObj = {}
             dataObj[i] = pageContent;
             incidentPage.push(dataObj)
 
         }) //end each loop 
         
-        //console.log(incidentPage['37']['37'])
-        //console.log(incidentPage)
-        // console.log("---^Scrape per page^---");
         let incidentObj = {
+            "page": i,
             "injury": incidentPage['0']['0']['1'].trim(),
             "ICR": incidentPage['0']['0']['3'].trim(),
             "date": incidentPage['0']['0']['5'].trim(),
@@ -69,36 +57,22 @@ let endAt = parseInt(process.argv[3])
             "helmet"  : incidentPage['16']['16']['27'].trim(),
             "alcoholInvolved"  : incidentPage['16']['16']['30'].trim()
         }   
-        // console.log('-------vvDatabase datavvv')
-        // console.log(incidentObj)
 
         db.Incident.create(incidentObj)
+
         .then(function (dbIncident) {
             console.log(incidentObj)
-            console.log("----------^Scrape per page^-----------\n\n");
-            console.log('----------vvDatabase datavvv')
+            console.log("----------^ SCRAPED PAGE "+i+" ^-----------\n\n");
+            console.log("----------v v INSERTED PAGE "+i+"  vvv")
             console.log(dbIncident)
-            
-        //   return db.Article.findOneAndUpdate({
-        //     _id: req.params.id
-        //   }, {
-        //     note: dbNote._id
-        //   }, {
-        //     new: true
-        //   });
+
         })
-        .then(function (dbIncident) {
-            //console.log(dbIncident)
-          // If the User was updated successfully, send it back to the client
-          //res.json(dbArticle);
-        })
+
         .catch(function (err) {
-            console.log("---Err Code",err)
-          // If an error occurs, send it back to the client
-          //res.json(err);
-        });
-        return incidentObj;
-        //incident.page = cheerio
+            console.log("---ERROR Code on page "+i+"\n",err)
+        })
+
+        
     }).catch((err) => {
         let incidentObj = {
             "type": "N/A",
@@ -116,50 +90,24 @@ let endAt = parseInt(process.argv[3])
             "helmet"  :  "N/A",
             "alcoholInvolved"  :  "N/A"
         }
-        console.log('-------vvDatabase datavvv')
-        console.log(incidentObj)
+        console.log("-------vv  Database ERROR data  "+i+" vvv---")
+        //console.log(incidentObj)
 
-        db.Incident.create(incidentObj)
-                .then(function (dbNote) {
-                //   return db.Article.findOneAndUpdate({
-                //     _id: req.params.id
-                //   }, {
-                //     note: dbNote._id
-                //   }, {
-                //     new: true
-                //   });
-                })
-                .then(function (dbArticle) {
-                  // If the User was updated successfully, send it back to the client
-                  //res.json(dbArticle);
-                })
-                .catch(function (err) {
-                  // If an error occurs, send it back to the client
-                  //res.json(err);
-                });
-
-
-        return incidentObj;
-
-        //console.log("----------    Error      ---\n", err.config.url)
     })
-
 } //end pageResult fct def 
 
 
 //pageResults('/MSPMedia2/IncidentDisplay/12386')
-
 async function run (start , end){
 
-    for (let i = start ; i < end +1; i++){
+    for ( i = start ; i < end +1; i++){
         console.log('=========== On Page ', i)
 
         await pageResults('/MSPMedia2/IncidentDisplay/'+i)
 
     }
-
-
 }//end run fct def
+
 
 //run(12373,12386)
 run(startAt,endAt)

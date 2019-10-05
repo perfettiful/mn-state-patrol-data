@@ -28,6 +28,12 @@ var Schema = mongoose.Schema;
 // This is similar to a Sequelize model
 var IncidentSchema = new Schema({
 
+
+page: {
+    type: String,
+    required: false
+
+  },
 injury: {
     type: String,
     required: false
@@ -36,6 +42,7 @@ injury: {
   // `link` is required and of type String
   ICR: {
     type: String,
+    unique:true,
     required: false
 
   },
