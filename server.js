@@ -18,7 +18,7 @@ mongoose.connect(MONGODB_URI, {
 });
 
 
-var PORT = process.env.port || 3000;
+var PORT = process.env.PORT || 3000;
 
 // Initialize Express
 var app = express();
@@ -274,7 +274,7 @@ app.get("/scrape-range/:start/:end", (req, res) => {
         "alcoholInvolved": "N/A"
       }
       console.log("-------vv  Database ERROR data  " + i + " vvv---")
-      console.log(err)
+      console.log(err.length)
 
     })
   } //end pageResult fct def 
