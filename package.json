@@ -1,26 +1,29 @@
 {
-  "name": "scrap3r",
+  "name": "react-google-books",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start":"node server.js",
-    "test": "test"
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd client && npm run start",
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pbrayer/scrap3r.git"
-  },
-  "author": "sam",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/pbrayer/scrap3r/issues"
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.7"
   },
-  "homepage": "https://github.com/pbrayer/scrap3r#readme",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.3",
-    "express": "^4.17.1",
+    "express": "^4.16.3",
+    "if-env": "^1.0.4",
+
     "express-handlebars": "^3.1.0",
     "jsonframe-cheerio": "^3.0.1",
     "mongoose": "^5.6.7",
