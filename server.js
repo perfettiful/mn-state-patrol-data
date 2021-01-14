@@ -11,9 +11,9 @@ var cheerio = require("cheerio");
 // Require all models
 var db = require("./models");
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/incident-scrape";
+var MONGOATLAS_URI = process.MONGOATLAS_URI|| "mongodb://localhost/incident-scrape";
 
-mongoose.connect(MONGODB_URI, {
+mongoose.connect(MONGOATLAS_URI, {
   useNewUrlParser: true
 });
 
