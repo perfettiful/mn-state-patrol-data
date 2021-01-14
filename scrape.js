@@ -1,3 +1,4 @@
+require('dotenv').config()
 var axios = require("axios");
 var cheerio = require("cheerio");
 var mongoose = require("mongoose");
@@ -5,9 +6,9 @@ var mongoose = require("mongoose");
 var db = require("./models");
 
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/incident-scrape";
+var MONGOATLAS_URI = process.env.MONGOATLAS_URI || "mongodb://localhost/incident-scrape";
 
-mongoose.connect(MONGODB_URI, {
+mongoose.connect(MONGOATLAS_URI, {
   useNewUrlParser: true
 });
 
@@ -112,6 +113,7 @@ async function run (start , end){
     }
 }//end run fct def
 
+console.log(MONGOATLAS_URI)
 
 //run(12373,12386)
 run(startAt,endAt)
